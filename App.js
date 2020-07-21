@@ -6,10 +6,13 @@ import { AppLoading } from 'expo';
 import {combineReducers, createStore} from 'redux';
 import {Provider} from 'react-redux';
 import productReducer from './store/reducers/product.reducer';
+import cartReducer from './store/reducers/cart.reducer';
 import ShopNavigator from './navigation/ShopNavigator'
+import {composeWithDevTools} from 'redux-devtools-extension'
 
 const rootReducer = combineReducers({
-  products: productReducer
+  products: productReducer,
+  cart: cartReducer
 })
 
 const FetchFonts = () => {
@@ -20,7 +23,7 @@ const FetchFonts = () => {
 }
 
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, composeWithDevTools())
 
 export default function App() {
 

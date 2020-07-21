@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import ProductOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen'
+import CartScreen from '../screens/shop/CartScreen';
 
 //others
 import Colors from '../constants/Colors'
@@ -37,6 +38,11 @@ function ProductsStackNavigation() {
         options={(
           { route } ) => ({ title: route.params.productTitle}
           )}
+         />
+          <ProductsStackNavigator.Screen 
+        name="CartScreen" 
+        component={CartScreen}
+        options={{title: 'Cart'}}
          />
       </ProductsStackNavigator.Navigator>
     </NavigationContainer>

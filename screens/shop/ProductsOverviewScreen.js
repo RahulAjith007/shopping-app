@@ -1,11 +1,33 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, FlatList } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet, FlatList, Platform } from 'react-native';
 import {useSelector} from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem'
+import {useDispatch} from 'react-redux'
+import {addToCart} from '../../store/actions/cart.actions'
+import {HeaderButtons, Item} from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
 
 const ProductsOverviewScreen = props => {
+
+const {navigation} = props    
+
 const products = useSelector( state => state.products.availableProducts )
+
+
+const dispatch = useDispatch();
+
+
+    navigation.setOptions({
+      headerRight: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item 
+        title='Cart' 
+        iconName= {Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+        onPress={() => {navigation.navigate('CartScreen')}}/>
+    </HeaderButtons>)
+    });
+
+
 
 const productOverviewListHandler = (itemData) => {
     return (
@@ -18,7 +40,9 @@ const productOverviewListHandler = (itemData) => {
             productTitle: itemData.item.title
             }
             )}}
-            onAddToCart={()=> {}}
+            onAddToCart={()=> {
+                dispatch(addToCart(itemData.item))}
+                }
         />
     )
 }

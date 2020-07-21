@@ -1,5 +1,6 @@
-import {ADD_TO_CART} from '../actions/cart.actions'
+import {ADD_TO_CART, REMOVE_FROM_CART} from '../actions/cart.actions'
 import {CartItem} from '../../models/cart-item';
+import { State } from 'react-native-gesture-handler';
 
 const initialState = {
     items: {},
@@ -32,7 +33,31 @@ export default (state = initialState, action) => {
                     ...state,
                    items: { ...state.items, [addedProduct.id]: updatedOrNewCartItem},
                    totalAmount: state.totalAmount + productPrice
-                }   
+                }  
+                
+            case REMOVE_FROM_CART:
+                const selectedCartItem = state.items[action.pid];
+                const currentQty = selectedCartItem.quantity ;
+                let updatedCartItem
+
+                if(currentQty > 1){
+                  updatedCartItem = new CartItem(
+                        selectedCartItem.quantity - 1,
+                        selectedCartItem.productTitle,
+                        selectedCartItem.productPrice,
+                        selectedCartItem.sum - selectedCartItem.productPrice
+                    )
+                    updatedCartItem = {...state.items, [action.pid]: updatedCartItem}
+                }else{
+                    updatedCartItem = {...state.items}
+                   delete updatedCartItem[action.pid]
+                }
+
+                return{
+                    ...state,
+                    items: updatedCartItem,
+                    totalAmount: state.totalAmount - selectedCartItem.productPrice
+                }
     }
     return state
 }

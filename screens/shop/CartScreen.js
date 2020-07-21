@@ -3,8 +3,12 @@ import { Button, View, Text, StyleSheet, FlatList } from 'react-native';
 import {useSelector} from 'react-redux'
 import Colors from '../../constants/Colors';
 import CartItem from '../../components/shop/CartItem';
+import {removeFromCart} from '../../store/actions/cart.actions';
+import {useDispatch} from 'react-redux';
 
 const CategoryGridTitle = props => {
+
+    const dispatch = useDispatch()
 
     const cartTotalAmount = useSelector(state => state.cart.totalAmount)
     const cartItems = useSelector(state => {
@@ -19,7 +23,8 @@ const CategoryGridTitle = props => {
                 })
                 console.log(transformedCartItems);
             }
-            return transformedCartItems;
+            return transformedCartItems.sort((a,b) => 
+            a.productId > b.productId ? 1: -1);
             
     })
 
@@ -29,7 +34,7 @@ const CategoryGridTitle = props => {
                 quantity={itemData.item.quantity}
                 title={itemData.item.productTitle}
                 amount={itemData.item.productPrice}
-                onRemove={() => {}}
+                onRemove={() => {dispatch(removeFromCart(itemData.item.productId))}}
             />
         )
     }

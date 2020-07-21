@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
+import { Button, View, Text, StyleSheet, FlatList } from 'react-native';
 import {useSelector} from 'react-redux'
-import Colors from '../../constants/Colors'
+import Colors from '../../constants/Colors';
+import CartItem from '../../components/shop/CartItem';
 
 const CategoryGridTitle = props => {
 
@@ -21,6 +22,17 @@ const CategoryGridTitle = props => {
             return transformedCartItems;
             
     })
+
+    const cartItemsHandler = (itemData) => {
+        return (
+            <CartItem
+                quantity={itemData.item.quantity}
+                title={itemData.item.productTitle}
+                amount={itemData.item.productPrice}
+                onRemove={() => {}}
+            />
+        )
+    }
     return (
         <View style={styles.screen}>
             <View style={styles.summary}>
@@ -32,7 +44,11 @@ const CategoryGridTitle = props => {
             />
             </View>
             <View>
-                <Text>Cart Items</Text>
+                <FlatList
+                    data={cartItems}
+                    keyExtractor={(item, index) => item.productId}
+                    renderItem={cartItemsHandler}
+                />
             </View>
         </View>
        

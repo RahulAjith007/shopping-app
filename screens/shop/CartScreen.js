@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux'
 import Colors from '../../constants/Colors';
 import CartItem from '../../components/shop/CartItem';
 import {removeFromCart} from '../../store/actions/cart.actions';
+import {addOrder} from '../../store/actions/order.actions'
 import {useDispatch} from 'react-redux';
 
 const CategoryGridTitle = props => {
@@ -46,6 +47,7 @@ const CategoryGridTitle = props => {
             color={Colors.accent} 
             title="Order Now" 
             disabled={cartItems.length === 0}
+            onPress={() => {dispatch(addOrder(cartItems, cartTotalAmount))}}
             />
             </View>
             <View>

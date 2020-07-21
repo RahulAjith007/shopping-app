@@ -1,6 +1,5 @@
 import {ADD_TO_CART, REMOVE_FROM_CART} from '../actions/cart.actions'
 import {CartItem} from '../../models/cart-item';
-import { State } from 'react-native-gesture-handler';
 
 const initialState = {
     items: {},

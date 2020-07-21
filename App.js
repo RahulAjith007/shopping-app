@@ -7,12 +7,14 @@ import {combineReducers, createStore} from 'redux';
 import {Provider} from 'react-redux';
 import productReducer from './store/reducers/product.reducer';
 import cartReducer from './store/reducers/cart.reducer';
+import orderReducer from './store/reducers/order.reducer';
 import ShopNavigator from './navigation/ShopNavigator'
 import {composeWithDevTools} from 'redux-devtools-extension'
 
 const rootReducer = combineReducers({
   products: productReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  orders: orderReducer
 })
 
 const FetchFonts = () => {

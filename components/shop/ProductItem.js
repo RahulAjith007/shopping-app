@@ -5,10 +5,10 @@ import {
     Text, 
     Image, 
     StyleSheet, 
-    Button,
     TouchableNativeFeedback,
     Platform } from 'react-native';
-import Colors from '../../constants/Colors'
+
+
 const ProductItem = props => {
 
 let TouchableCmp = TouchableOpacity
@@ -21,7 +21,7 @@ if(Platform.OS === 'android' && Platform.Version >=21){
     return ( 
         <View style={styles.product}>
         <View style={styles.touchable}>
-        <TouchableCmp onPress={props.onViewDetail} useForeground>
+        <TouchableCmp onPress={props.onSelect} useForeground>
         <View>
       <View style={styles.imageContainer}>
       <Image style={styles.image} source={{uri: props.image}}/>
@@ -31,9 +31,8 @@ if(Platform.OS === 'android' && Platform.Version >=21){
           <Text style={styles.price}>${props.price.toFixed(2)}</Text>
           </View>
         
-          <View style={styles.ButtonGroup}>
-              <Button color={Colors.primaryColor} title="View Details" onPress={props.onViewDetail}/>
-              <Button color={Colors.primaryColor} title="To Cart" onPress={props.onAddToCart}/>
+          <View style={styles.actions}>
+             {props.children}
           </View>
           </View>
       </TouchableCmp>
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     },
     details:{
         alignItems: 'center',
-        height: '15%',
+        height: '17%',
         padding: 10
     },
     title:{
@@ -84,11 +83,11 @@ const styles = StyleSheet.create({
         color: '#888',
         fontFamily: 'open-sans'
     },
-    ButtonGroup:{
+    actions:{
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: '25%',
+        height: '23%',
         paddingHorizontal: 20
     }
 })

@@ -35,6 +35,7 @@ const CategoryGridTitle = props => {
                 quantity={itemData.item.quantity}
                 title={itemData.item.productTitle}
                 amount={itemData.item.productPrice}
+                deletable
                 onRemove={() => {dispatch(removeFromCart(itemData.item.productId))}}
             />
         )

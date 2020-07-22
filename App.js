@@ -10,6 +10,9 @@ import cartReducer from './store/reducers/cart.reducer';
 import orderReducer from './store/reducers/order.reducer';
 import ShopNavigator from './navigation/ShopNavigator'
 import {composeWithDevTools} from 'redux-devtools-extension'
+import {enableScreens} from 'react-native-screens';
+
+enableScreens();
 
 const rootReducer = combineReducers({
   products: productReducer,

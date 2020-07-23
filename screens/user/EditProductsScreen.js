@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {  View, Text, ScrollView, TextInput, StyleSheet } from 'react-native';
+import {  View, Text, ScrollView, TextInput, StyleSheet, Alert } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {createProduct, updateProduct} from '../../store/actions/product.actions'
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
@@ -15,18 +15,19 @@ const editedProduct = useSelector(state => state.products.userProducts.find( pro
 
 const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
 const [imageUrl, setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
-const [price, setPrice] = useState(editedProduct ? editedProduct.price : '');
+const [price, setPrice] = useState(editedProduct   ? editedProduct.price : '');
 const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
 
 const dispatch = useDispatch();
 
+
 const submitHandler = useCallback(() => {
     if(editedProduct){
-        dispatch(updateProduct(prodId ,title, description, imageUrl, price ))
+        dispatch(updateProduct(prodId ,title, description, imageUrl ))
     }else{
          dispatch(createProduct(title, description, imageUrl, +price ))
     }
-    navigation.pop()
+    navigation.pop();
 }, [navigation, dispatch, prodId, title, description, imageUrl, price])
 
 React.useLayoutEffect (() => {

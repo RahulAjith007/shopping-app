@@ -6,6 +6,7 @@ import CartItem from '../../components/shop/CartItem';
 import {removeFromCart} from '../../store/actions/cart.actions';
 import {addOrder} from '../../store/actions/order.actions'
 import {useDispatch} from 'react-redux';
+import Card from '../../components/UI/Card';
 
 const CategoryGridTitle = props => {
 
@@ -42,7 +43,7 @@ const CategoryGridTitle = props => {
     }
     return (
         <View style={styles.screen}>
-            <View style={styles.summary}>
+            <Card style={styles.summary}>
             <Text style={styles.summaryText}>Total : <Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2) *100 /100)}</Text></Text>
             <Button 
             color={Colors.accent} 
@@ -50,7 +51,7 @@ const CategoryGridTitle = props => {
             disabled={cartItems.length === 0}
             onPress={() => {dispatch(addOrder(cartItems, cartTotalAmount))}}
             />
-            </View>
+            </Card>
             <View>
                 <FlatList
                     data={cartItems}
@@ -73,13 +74,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 20,
         padding: 10,
-        shadowColor: 'black',
-        shadowOpacity: 0.26,
-        shadowOffset:{height: 2, width: 0},
-        shadowRadius: 8,
-        borderRadius: 10,
-        backgroundColor: 'white',
-        elevation: 6,
 
     },
     summaryText:{

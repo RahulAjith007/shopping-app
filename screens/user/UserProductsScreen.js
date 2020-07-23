@@ -24,7 +24,6 @@ const deleteHandler =(id) => {
 }
 
 
-
     const dispatch = useDispatch()
 
     const userProductsHandler = (itemData) => {
@@ -34,7 +33,7 @@ const deleteHandler =(id) => {
                 title={itemData.item.title}
                 price={itemData.item.price}
                 onSelect={() => {
-                    editProductHandler(id)
+                    editProductHandler(itemData.item.id)
                  }}
 
 

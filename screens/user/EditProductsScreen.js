@@ -1,34 +1,86 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useReducer } from 'react';
 import {  View, Text, ScrollView, TextInput, StyleSheet, Alert } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {createProduct, updateProduct} from '../../store/actions/product.actions'
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
+
+const formReducer = (state, action) => {
+    if(action.type === 'FORM_INPUT_UPDATE'){
+        const updateValues = {
+            ...state.inputValues,
+            [action.input]: [action.value]
+        };
+        const updatedValidities = {
+            ...state.inputValidities,
+            [action.input]: [action.value]
+        }
+        let updatedFormIsValid = true
+        for( const key in updatedValidities) {
+           updatedFormIsValid =updatedFormIsValid && updatedValidities[key]
+        }
+        return {
+            formIsValid: updatedFormIsValid,
+            inputValues: updateValues,
+            inputValidities: updatedValidities
+        }
+    }
+    return state
+}
+
+
 const EditProductScreen = props => {
-
-    const {navigation} = props
-
+const {navigation} = props
 const { prodId } = props.route.params;  
 const editedProduct = useSelector(state => state.products.userProducts.find( product => product.id === prodId))
 
-
-const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
-const [imageUrl, setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
-const [price, setPrice] = useState(editedProduct   ? editedProduct.price : '');
-const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
-
 const dispatch = useDispatch();
+
+const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+        title: editedProduct ? editedProduct.title : '',
+        imageUrl: editedProduct ? editedProduct.imageUrl : '',
+        price:'',
+        description: editedProduct ? editedProduct.description : ''
+    },
+    inputValidities:{
+        title: editedProduct ? true: false,
+        imageUrl: editedProduct ? true: false,
+        price: editedProduct ? true: false,
+        description : editedProduct ? true: false,
+    },
+    formIsValid: editedProduct ? true: false,
+})
 
 
 const submitHandler = useCallback(() => {
-    if(editedProduct){
-        dispatch(updateProduct(prodId ,title, description, imageUrl ))
-    }else{
-         dispatch(createProduct(title, description, imageUrl, +price ))
-    }
-    navigation.pop();
-}, [navigation, dispatch, prodId, title, description, imageUrl, price])
+
+            if(!formState.formIsValid ){
+                Alert.alert('Wrong Input !', 'Please check the errors in the form', [{text: 'Okay'}])
+                return;
+            }
+
+                if(editedProduct){
+                    dispatch(updateProduct(
+                        prodId ,
+                        formState.inputValues.title, 
+                        formState.inputValues.description, 
+                        formState.inputValues.imageUrl ))
+                }else{
+                    dispatch(createProduct(
+                        formState.inputValues.title, 
+                        formState.inputValues.description, 
+                        formState.inputValues.imageUrl, 
+                        +formState.inputValues.price ))
+                }
+                navigation.pop();
+            }, [navigation, dispatch, prodId, formState]
+    )
+
+
 
 React.useLayoutEffect (() => {
     props.navigation.setOptions({
@@ -44,7 +96,18 @@ React.useLayoutEffect (() => {
 
 
 
-
+const textChangeHandler = (inputIdentifier, text) => {
+let isValid = false;
+if(text.trim().length > 0){
+   isValid = true
+}
+    dispatchFormState({
+        type: FORM_INPUT_UPDATE, 
+        value: text,
+        isValid: isValid,
+        input: inputIdentifier
+    })
+}
 
     return (
        <ScrollView style={styles.formControl}>
@@ -52,33 +115,42 @@ React.useLayoutEffect (() => {
            <View style={styles.label}>
                <Text style={styles.label}>Title</Text>
                <TextInput 
-               value={title}
-               onChangeText={(text) => {setTitle(text)}}
-               style={styles.input}/>
+               value={formState.inputValues.title}
+               onChangeText={textChangeHandler.bind(this, 'title')}
+               style={styles.input}
+               keyboardType='default' 
+               autoCapitalize='sentences'
+               autoCorrect = {false}
+               returnKeyType = 'next'
+               />
+
+               {!formState.inputValidities.title && <Text> Please Enter a Valid title !</Text>}
            </View>
 
            <View style={styles.label}>
                <Text style={styles.label}>Image Url</Text>
                <TextInput 
-               value={imageUrl}
-               onChangeText={(text) => {setImageUrl(text)}}
+               value={formState.inputValues.imageUrl}
+               onChangeText={textChangeHandler.bind(this, 'imageUrl')}
                style={styles.input}/>
            </View>
 
            {editedProduct ? null :(<View style={styles.label}>
                <Text style={styles.label}>Price</Text>
                <TextInput
-               value={price}
-               onChangeText={(text) => {setPrice(text)}}
-                style={styles.input}/>
+               value={formState.inputValues.price}
+               onChangeText={textChangeHandler.bind(this, 'price')}
+                style={styles.input}
+                 keyboardType='decimal-pad'   
+                />
            </View>)}
 
     
            <View style={styles.label}>
                <Text style={styles.label}>Description</Text>
                <TextInput style={styles.input}
-                 value={description}
-                   onChangeText={(text) => {setDescription(text)}}
+                 value={formState.inputValues.description}
+                   onChangeText={textChangeHandler.bind(this, 'description')}
                />
            </View>
            </View>

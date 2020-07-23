@@ -1,16 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {  View, Text, ScrollView, TextInput, StyleSheet } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {createProduct, updateProduct} from '../../store/actions/product.actions'
+import {HeaderButtons, Item} from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton'
 
 const EditProductScreen = props => {
 
-const { productId } = props.route.params   
-const editedProduct = useSelector(state => state.products.userProducts.find( product => product.id === productId))
+    const {navigation} = props
+
+const { prodId } = props.route.params;  
+const editedProduct = useSelector(state => state.products.userProducts.find( product => product.id === prodId))
+
 
 const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
 const [imageUrl, setImageUrl] = useState(editedProduct ? editedProduct.imageUrl : '');
 const [price, setPrice] = useState(editedProduct ? editedProduct.price : '');
 const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
+
+const dispatch = useDispatch();
+
+const submitHandler = useCallback(() => {
+    if(editedProduct){
+        dispatch(updateProduct(prodId ,title, description, imageUrl, price ))
+    }else{
+         dispatch(createProduct(title, description, imageUrl, +price ))
+    }
+    navigation.pop()
+}, [navigation, dispatch, prodId, title, description, imageUrl, price])
+
+React.useLayoutEffect (() => {
+    props.navigation.setOptions({
+        title: prodId ? 'Edit Product' : 'Add Product',
+        headerRight: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            <Item 
+            title='Save' 
+            iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'} 
+            onPress={submitHandler}/>
+        </HeaderButtons>)
+    })
+},[submitHandler])
 
 
 

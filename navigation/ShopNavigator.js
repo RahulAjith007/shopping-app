@@ -129,7 +129,7 @@ const AdminStackNavigation = navData => {
             title='Add' 
             iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'} 
             onPress={() => {
-              navData.navigation.navigate('EditProductsScreen')
+              navData.navigation.navigate('EditProductsScreen',{prodId: ''})
             }}/>
         </HeaderButtons>),
         }}
@@ -138,18 +138,6 @@ const AdminStackNavigation = navData => {
 <AdminStackNavigator.Screen 
         name="EditProductsScreen" 
         component={EditProductsScreen}
-        options={(
-          { route } ) => ({ title: route.params.productTitle ? 'Edit Product' : 'Add product',
-          headerRight: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Item 
-            title='Save' 
-            iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'} 
-            onPress={() => {
-              navData.navigation.navigate('EditProductsScreen')
-            }}/>
-        </HeaderButtons>)
-          }
-          )}
          />
       </AdminStackNavigator.Navigator>
   );

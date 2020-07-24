@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import {combineReducers, createStore} from 'redux';
+import {combineReducers, createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
+import ReduxThunk from 'redux-thunk'
 import productReducer from './store/reducers/product.reducer';
 import cartReducer from './store/reducers/cart.reducer';
 import orderReducer from './store/reducers/order.reducer';
@@ -28,7 +29,7 @@ const FetchFonts = () => {
 }
 
 
-const store = createStore(rootReducer, composeWithDevTools())
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 
 export default function App() {
 

@@ -24,9 +24,7 @@ export const fetchProducts = () => {
                         resData[key].price
                     ) 
                 )
-                console.log(key);
             }
-        console.log(loadedProducts);
             dispatch({
                 type: 'SET_PRODUCTS',
                 products: loadedProducts
@@ -41,10 +39,14 @@ export const fetchProducts = () => {
 
 
 export const deleteProduct = productId => {
-    return {
-        type: DELETE_PRODUCT,
-        pid: productId
+    return async dispatch => {
+      await product.delete(`/products/${productId}.json`)
+        dispatch ({
+            type: DELETE_PRODUCT,
+            pid: productId
+        })
     }
+    
 }
 
 export const createProduct = (title, description, imageUrl, price) => {
@@ -58,7 +60,6 @@ export const createProduct = (title, description, imageUrl, price) => {
         
        const response = await product.post('/products.json', productData)
         const resData = await response.data
-        console.log(resData);
 
         dispatch ({
             type: CREATE_PRODUCT,
@@ -73,7 +74,18 @@ export const createProduct = (title, description, imageUrl, price) => {
 
 
 export const updateProduct = (id, title, description, imageUrl) => {
-    return {
+
+return async dispatch => {
+    const productData = {
+        title,
+        description,
+        imageUrl,
+        price
+    }
+    
+  await product.patch(`/products/${id}.json`, productData)
+    
+    dispatch ({
         type: UPDATE_PRODUCT,
         pid: id,
         productData: {
@@ -81,6 +93,8 @@ export const updateProduct = (id, title, description, imageUrl) => {
             description: description,
             imageUrl: imageUrl,
         }
+    })
+}
 
-    }
+  
 }

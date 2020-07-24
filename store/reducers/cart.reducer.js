@@ -1,6 +1,6 @@
 import {ADD_TO_CART, REMOVE_FROM_CART} from '../actions/cart.actions'
 import {ADD_ORDER} from '../actions/order.actions'
-import { DELETE_PRODUCT, deleteProduct } from '../actions/product.actions'
+import { DELETE_PRODUCT} from '../actions/product.actions'
 import {CartItem} from '../../models/cart-item';
 
 const initialState = {

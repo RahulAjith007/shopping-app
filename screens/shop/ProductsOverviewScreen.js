@@ -32,6 +32,12 @@ let loadedProducts =useCallback( async () => {
     setIsLoaded(false)
 }, [dispatch, setIsLoaded, setError]) 
 
+// first useEffect for refreshing the all products in drawer navigation
+
+useEffect(() => {
+   const willFocusSub = props.navigation.addListener('focus' ,loadedProducts);
+  return willFocusSub;
+}, [loadedProducts])
 
 useEffect(() => {
     loadedProducts();

@@ -1,6 +1,6 @@
 //React
 
-import React from 'react';
+import React, { useState } from 'react';
 import {Platform} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,6 +14,7 @@ import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen'
 import EditProductsScreen from '../screens/user/EditProductsScreen'
+import AuthScreen from '../screens/user/AuthScreen';
 
 //others
 
@@ -29,6 +30,8 @@ const ProductsStackNavigator = createStackNavigator();
 const OrdersStackNavigator = createStackNavigator();
 const AdminStackNavigator = createStackNavigator();
 const OrdersDrawerNavigator = createDrawerNavigator();
+const AuthStackNavigator = createStackNavigator();
+
 
 
 const ProductsStackNavigation = navData => {
@@ -147,7 +150,7 @@ const AdminStackNavigation = navData => {
 
 function OrdersDrawerNavigation() {
   return (
-    <NavigationContainer>
+  
       <OrdersDrawerNavigator.Navigator screenOptions={{
           headerStyle:{
               backgroundColor: Platform.OS === 'android'? Colors.primaryColor: ''
@@ -186,26 +189,44 @@ function OrdersDrawerNavigation() {
          />
 
 
-<OrdersDrawerNavigator.Screen 
-        name="AdminStackNavigation" 
-        component={AdminStackNavigation}
-        options={{title: 'Admin',
-        drawerIcon: drawerConfig => (
-            <Ionicons
-              name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
-              size={23}
-              color={Colors.primaryColor}
-            />
-          )
-        }}
+      <OrdersDrawerNavigator.Screen 
+              name="AdminStackNavigation" 
+              component={AdminStackNavigation}
+              options={{title: 'Admin',
+              drawerIcon: drawerConfig => (
+                  <Ionicons
+                    name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+                    size={23}
+                    color={Colors.primaryColor}
+                  />
+                )
+              }}
          />
 
          
       </OrdersDrawerNavigator.Navigator>
+    
+  );
+}
+
+
+ function AuthStackNavigation() {
+   const [auth, setAuth] = useState(true)
+  return (
+    <NavigationContainer>
+      <AuthStackNavigator.Navigator>
+       
+    
+            <AuthStackNavigator.Screen name="AuthScreen" component={AuthScreen} />
+            
+        
+         
+        
+      </AuthStackNavigator.Navigator>
     </NavigationContainer>
   );
 }
 
 
 
-export default OrdersDrawerNavigation
+export default AuthStackNavigation

@@ -18,18 +18,18 @@ const dispatch = useDispatch();
 
 const [isLoaded, setIsLoaded] = useState(false)
 const [error, setError] = useState()
+const [refreshing, setRefreshing] = useState(false)
 
 
 let loadedProducts =useCallback( async () => {
     setError(null)
-    setIsLoaded(true)
+    setRefreshing(true)
     try{
         await dispatch(fetchProducts());
     }catch(err){
         setError(err.message)
     }
-
-    setIsLoaded(false)
+    setRefreshing(false)
 }, [dispatch, setIsLoaded, setError]) 
 
 // first useEffect for refreshing the all products in drawer navigation
@@ -40,7 +40,10 @@ useEffect(() => {
 }, [loadedProducts])
 
 useEffect(() => {
-    loadedProducts();
+    setIsLoaded(true)
+    loadedProducts().then(() => {
+        setIsLoaded(false);
+    })
 }, [dispatch, loadedProducts])
 
    
@@ -87,7 +90,12 @@ const productOverviewListHandler = (itemData) => {
 }
 
 
-let ProductsOverviewScreenContent = <FlatList data={products} keyExtractor ={item => item.id} renderItem={productOverviewListHandler} />
+let ProductsOverviewScreenContent = <FlatList
+onRefresh={loadedProducts}
+refreshing={refreshing}
+ data={products} 
+ keyExtractor ={item => item.id} 
+ renderItem={productOverviewListHandler} />
 
 
    if(isLoaded){

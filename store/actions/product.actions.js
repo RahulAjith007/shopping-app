@@ -8,9 +8,10 @@ export const SET_PRODUCTS = 'SET_PRODUCTS'
 
 
 export const fetchProducts = () => {
-    return async dispatch => {
+    return async (dispatch, getState )=> {
+        const token = getState().auth.token
         try{
-            const response = await product.get('/products.json')
+            const response = await product.get(`/products.json?auth=${token}`)
             const resData = await response.data
             const loadedProducts = [];
             for(let key in resData){
@@ -39,8 +40,9 @@ export const fetchProducts = () => {
 
 
 export const deleteProduct = productId => {
-    return async dispatch => {
-      await product.delete(`/products/${productId}.json`)
+    return async (dispatch, getState )=> {
+        const token = getState().auth.token
+      await product.delete(`/products/${productId}.json?auth=${token}`)
         dispatch ({
             type: DELETE_PRODUCT,
             pid: productId
@@ -50,7 +52,8 @@ export const deleteProduct = productId => {
 }
 
 export const createProduct = (title, description, imageUrl, price) => {
-    return async dispatch => {
+    return async (dispatch, getState )=> {
+        const token = getState().auth.token
         const productData = {
             title,
             description,
@@ -58,7 +61,7 @@ export const createProduct = (title, description, imageUrl, price) => {
             price
         }
         
-       const response = await product.post('/products.json', productData)
+       const response = await product.post(`/products.json?auth=${token}`, productData)
         const resData = await response.data
 
         dispatch ({

@@ -37,14 +37,15 @@ export const fetchOrder = () => {
 export const addOrder = (cartItems, totalAmount) => {
   
   const date = new Date()
-  return async dispatch => {
+  return async (dispatch, getState )=> {
+    const token = getState().auth.token
     const productData = {
        cartItems,
        totalAmount,
        date: new Date().toISOString()
     }
     
-   const response = await product.post('/orders/u1.json', productData)
+   const response = await product.post(`/orders/u1.json?auth=${token}`, productData)
     const resData = await response.data
 
     dispatch ({

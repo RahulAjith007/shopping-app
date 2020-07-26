@@ -1,12 +1,12 @@
 import React from 'react';
-import { FlatList, StyleSheet, Button, Alert } from 'react-native';
+import { FlatList, StyleSheet, Button, Alert, Text, View } from 'react-native';
 import ProductItem from '../../components/shop/ProductItem';
 import {useSelector, useDispatch} from 'react-redux';
 import Colors from '../../constants/Colors';
 import {deleteProduct} from '../../store/actions/product.actions'
 
 
-const UserProduct = props => {
+const UserProductScreen = props => {
 
    const userProducts = useSelector(state => state.products.userProducts) 
 
@@ -55,13 +55,24 @@ const deleteHandler =(id) => {
         )
     }
 
+let UserProductScreenContent = ( <FlatList
+    data = {userProducts}
+    keyExtractor = {(item, index) => item.id}
+    renderItem={userProductsHandler}
+/>)
+
+if(userProducts.length === 0){
+    UserProductScreenContent =(<View>
+        <Text >You have no product! Start adding your product</Text>
+    </View> )
+}
 
     return (
-        <FlatList
-            data = {userProducts}
-            keyExtractor = {(item, index) => item.id}
-            renderItem={userProductsHandler}
-        />
+        <View style={{flex:1, justifyContent: 'center'}}>
+            {UserProductScreenContent}
+        </View>
+            
+       
     )
 }
 
@@ -69,4 +80,4 @@ const styles = StyleSheet.create({
     
 })
 
-export default UserProduct
+export default UserProductScreen

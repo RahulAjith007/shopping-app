@@ -6,10 +6,10 @@ import { Order } from '../../models/order';
 
 export const fetchOrder = () => {
   return async dispatch => {
+    const userId = getState().auth.userId
     try{
-      const response = await product.get('/orders/u1.json')
+      const response = await product.get(`/orders/${userId}.json`)
       const resData = response.data
-      console.log(resData);
       const loadedOrders = [];
       for(let key in resData){
           loadedOrders.push(
@@ -35,17 +35,17 @@ export const fetchOrder = () => {
 
 
 export const addOrder = (cartItems, totalAmount) => {
-  
   const date = new Date()
   return async (dispatch, getState )=> {
     const token = getState().auth.token
+    const userId = getState().auth.userId
     const productData = {
        cartItems,
        totalAmount,
        date: new Date().toISOString()
     }
     
-   const response = await product.post(`/orders/u1.json?auth=${token}`, productData)
+   const response = await product.post(`/orders/${userId}.json?auth=${token}`, productData)
     const resData = await response.data
 
     dispatch ({

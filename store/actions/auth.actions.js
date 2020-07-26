@@ -21,7 +21,6 @@ export const signup = (email, password) => {
       };
         const response =  await firebaseAuth.post('/accounts:signUp?key=AIzaSyDFJynrkARTeVC0ES3wZ7hcn8y-AIX69y4', signupData, config)
         const resData = response.data
-      console.log(resData);
       dispatch({ 
         type: SIGNUP,
         token: action.token,
@@ -56,7 +55,6 @@ export const signin = (email, password) => {
       };
         const response =  await firebaseAuth.post('/accounts:signInWithPassword?key=AIzaSyDFJynrkARTeVC0ES3wZ7hcn8y-AIX69y4', signupData, config)
         const resData = response.data
-      console.log(resData);
       dispatch({ 
         type: SIGNIN,
         token: resData.idToken,

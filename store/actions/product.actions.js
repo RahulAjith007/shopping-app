@@ -9,16 +9,16 @@ export const SET_PRODUCTS = 'SET_PRODUCTS'
 
 export const fetchProducts = () => {
     return async (dispatch, getState )=> {
-        const token = getState().auth.token
+        const userId = getState().auth.userId
         try{
-            const response = await product.get(`/products.json?auth=${token}`)
+            const response = await product.get('/products.json')
             const resData = await response.data
             const loadedProducts = [];
             for(let key in resData){
                 loadedProducts.push(
                     new Product (
                         key,
-                        'u1',
+                        resData[key].ownerId,
                         resData[key].title,
                         resData[key].imageUrl,
                         resData[key].description,
@@ -28,12 +28,13 @@ export const fetchProducts = () => {
             }
             dispatch({
                 type: 'SET_PRODUCTS',
-                products: loadedProducts
+                products: loadedProducts,
+                userProducts: loadedProducts.filter(loadedProduct => loadedProduct.ownerId === userId)
             })
         }
         catch (err){
             //send to custom analytics
-            throw err
+            // throw err
         }       
     }
 }
@@ -52,13 +53,16 @@ export const deleteProduct = productId => {
 }
 
 export const createProduct = (title, description, imageUrl, price) => {
+
     return async (dispatch, getState )=> {
         const token = getState().auth.token
+        const userId = getState().auth.userId
         const productData = {
             title,
             description,
             imageUrl,
-            price
+            price,
+            ownerId: userId
         }
         
        const response = await product.post(`/products.json?auth=${token}`, productData)
@@ -71,7 +75,8 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title: title,
                 description: description,
                 imageUrl: imageUrl,
-                price: price
+                price: price,
+                ownerId: userId
             }})
 }}
 

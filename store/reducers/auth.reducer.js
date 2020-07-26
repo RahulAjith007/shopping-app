@@ -10,7 +10,7 @@ export default(state=initialState, action) => {
         case SIGNIN:
             return{
                 token: action.token,
-                    userId: action.userId
+             userId: action.userId
             }
             case SIGNUP:
                 return{

@@ -17,12 +17,14 @@ import UserProductsScreen from '../screens/user/UserProductsScreen'
 import EditProductsScreen from '../screens/user/EditProductsScreen'
 import AuthScreen from '../screens/user/AuthScreen';
 
+
 //others
 
 import Colors from '../constants/Colors'
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import CustomHeaderButton from '../components/UI/CustomHeaderButton'
 import {Ionicons} from '@expo/vector-icons'
+import { Order } from '../models/order';
 
 
 //Navigators
@@ -32,6 +34,7 @@ const OrdersStackNavigator = createStackNavigator();
 const AdminStackNavigator = createStackNavigator();
 const OrdersDrawerNavigator = createDrawerNavigator();
 const AuthStackNavigator = createStackNavigator();
+
 
 
 
@@ -151,9 +154,25 @@ const AdminStackNavigation = navData => {
 
 
 
+
+
+
 function OrdersDrawerNavigation() {
+
+const Authorized = (useSelector( state => state.auth.token ))
+console.log(Authorized)
+
   return (
   
+
+    <NavigationContainer>
+
+
+    {Authorized === null ? (
+      <AuthStackNavigator.Navigator>
+             <AuthStackNavigator.Screen name="AuthScreen" component={AuthScreen} />
+       </AuthStackNavigator.Navigator>
+    ) : (
       <OrdersDrawerNavigator.Navigator screenOptions={{
           headerStyle:{
               backgroundColor: Platform.OS === 'android'? Colors.primaryColor: ''
@@ -208,28 +227,15 @@ function OrdersDrawerNavigation() {
 
          
       </OrdersDrawerNavigator.Navigator>
+    )}
+   </NavigationContainer>
     
   );
 }
 
 
- function AuthStackNavigation() {
-   const [auth, setAuth] = useState(true)
-  return (
-    <NavigationContainer>
-      <AuthStackNavigator.Navigator>
-       
-    
-            <AuthStackNavigator.Screen name="AuthScreen" component={AuthScreen} />
-            
-        
-         
-        
-      </AuthStackNavigator.Navigator>
-    </NavigationContainer>
-  );
-}
 
 
 
-export default AuthStackNavigation
+
+export default OrdersDrawerNavigation;

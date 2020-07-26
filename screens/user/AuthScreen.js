@@ -86,11 +86,12 @@ useEffect(() => {
       setError(null)
       setIsLoading(true)
       await dispatch(action);
+      // props.navigation.navigate('ProductsStackNavigation')
     }catch(err){
       setError(err.message)
-      
+      setIsLoading(false)
     }
-    setIsLoading(false)
+    
   
 };
 

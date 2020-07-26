@@ -1,7 +1,14 @@
 import firebaseAuth from '../../api/firebaseAuth'
-export const SIGNUP = 'SIGNUP';
-export const SIGNIN = 'SIGNIN';
+import AsyncStorage from '@react-native-community/async-storage'; 
+export const AUTHENTICATE = 'AUTHENTICATE'
 
+export const authenticate = (userId, token) => {
+  return{
+    type: AUTHENTICATE,
+    userId,
+    token
+  }
+}
 
 
 export const signup = (email, password) => {
@@ -21,11 +28,7 @@ export const signup = (email, password) => {
       };
         const response =  await firebaseAuth.post('/accounts:signUp?key=AIzaSyDFJynrkARTeVC0ES3wZ7hcn8y-AIX69y4', signupData, config)
         const resData = response.data
-      dispatch({ 
-        type: SIGNUP,
-        token: action.token,
-        userId: action.userId,
-       });
+      dispatch(authenticate(resData.localId, resData.idToken));
     }catch(err){
       let errData = err.response.data;
       let message = 'Something went wrong'
@@ -55,10 +58,10 @@ export const signin = (email, password) => {
       };
         const response =  await firebaseAuth.post('/accounts:signInWithPassword?key=AIzaSyDFJynrkARTeVC0ES3wZ7hcn8y-AIX69y4', signupData, config)
         const resData = response.data
-      dispatch({ 
-        type: SIGNIN,
-        token: resData.idToken,
-        userId: resData.localId });
+      dispatch(authenticate(resData.localId, resData.idToken));
+        const expirationDate =new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000) 
+        saveDataToStorage(resData.idToken, resData.localId, expirationDate)
+
     }catch(err){
       
       let errData = err.response.data;
@@ -73,5 +76,14 @@ export const signin = (email, password) => {
     }
   };
 };
+
+
+const saveDataToStorage = (token, userId, expirationDate) => {
+  AsyncStorage.setItem('userData', JSON.stringify({
+    token: token,
+    userId: userId,
+    expiryDate: expirationDate.toISOString()
+  }))
+}
 
 

@@ -16,6 +16,7 @@ import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen'
 import EditProductsScreen from '../screens/user/EditProductsScreen'
 import AuthScreen from '../screens/user/AuthScreen';
+import StartupScreen from '../screens/StartupScreen'
 
 
 //others
@@ -34,6 +35,7 @@ const OrdersStackNavigator = createStackNavigator();
 const AdminStackNavigator = createStackNavigator();
 const OrdersDrawerNavigator = createDrawerNavigator();
 const AuthStackNavigator = createStackNavigator();
+
 
 
 
@@ -170,6 +172,7 @@ console.log(Authorized)
 
     {Authorized === null ? (
       <AuthStackNavigator.Navigator>
+             <AuthStackNavigator.Screen name="StartupScreen" component={StartupScreen} />
              <AuthStackNavigator.Screen name="AuthScreen" component={AuthScreen} />
        </AuthStackNavigator.Navigator>
     ) : (

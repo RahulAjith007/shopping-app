@@ -23,7 +23,7 @@ useEffect(()=> {
         props.navigation.navigate('AuthScreen')
         return;
        }
-       props.navigation.navigate('OrdersDrawernavigation')
+       props.navigation.navigate('ProductsStackNavigation')
        dispatch(authActions.authenticate(userId, token))
     }
     tryLogin()

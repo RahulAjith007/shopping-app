@@ -43,42 +43,53 @@ const AuthStackNavigator = createStackNavigator();
 
 
 const ProductsStackNavigation = navData => {
+  const Authorized = (useSelector( state => state.auth.token ))
+    console.log(Authorized)
   return (
+
+    Authorized === null ? (
+      <ProductsStackNavigator.Navigator>
+             <ProductsStackNavigator.Screen name="StartupScreen" component={StartupScreen} />
+             <ProductsStackNavigator.Screen name="AuthScreen" component={AuthScreen} />
+       </ProductsStackNavigator.Navigator>
+    ) : (
       <ProductsStackNavigator.Navigator screenOptions={{
-          headerStyle:{
-              backgroundColor: Platform.OS === 'android'? Colors.primaryColor: ''
-          },
-          headerTintColor: Platform.OS === 'android'? 'white' : Colors.primaryColor,
-          headerTitleStyle:{fontFamily: 'open-sans-bold'},
-          headerBackTitleStyle:{fontFamily: 'open-sans-bold'}
-      }}>
+        headerStyle:{
+            backgroundColor: Platform.OS === 'android'? Colors.primaryColor: ''
+        },
+        headerTintColor: Platform.OS === 'android'? 'white' : Colors.primaryColor,
+        headerTitleStyle:{fontFamily: 'open-sans-bold'},
+        headerBackTitleStyle:{fontFamily: 'open-sans-bold'}
+    }}>
+      <ProductsStackNavigator.Screen 
+      name="ProductOverviewScreen" 
+      component={ProductOverviewScreen}
+      options={{title: 'All Products',
+      headerLeft: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item 
+          title='Menu' 
+          iconName='ios-menu' 
+          onPress={() => {
+            navData.navigation.toggleDrawer()
+          }}/>
+      </HeaderButtons>)
+      }}
+       />
         <ProductsStackNavigator.Screen 
-        name="ProductOverviewScreen" 
-        component={ProductOverviewScreen}
-        options={{title: 'All Products',
-        headerLeft: () => ( <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Item 
-            title='Menu' 
-            iconName='ios-menu' 
-            onPress={() => {
-              navData.navigation.toggleDrawer()
-            }}/>
-        </HeaderButtons>)
-        }}
-         />
-          <ProductsStackNavigator.Screen 
-        name="ProductDetailScreen" 
-        component={ProductDetailScreen}
-        options={(
-          { route } ) => ({ title: route.params.productTitle}
-          )}
-         />
-          <ProductsStackNavigator.Screen 
-        name="CartScreen" 
-        component={CartScreen}
-        options={{title: 'Cart'}}
-         />
-      </ProductsStackNavigator.Navigator>
+      name="ProductDetailScreen" 
+      component={ProductDetailScreen}
+      options={(
+        { route } ) => ({ title: route.params.productTitle}
+        )}
+       />
+        <ProductsStackNavigator.Screen 
+      name="CartScreen" 
+      component={CartScreen}
+      options={{title: 'Cart'}}
+       />
+    </ProductsStackNavigator.Navigator>
+    )
+      
   );
 }
 
@@ -161,22 +172,14 @@ const AdminStackNavigation = navData => {
 
 function OrdersDrawerNavigation() {
 
-const Authorized = (useSelector( state => state.auth.token ))
-console.log(Authorized)
+
 
   return (
   
 
     <NavigationContainer>
 
-
-    {Authorized === null ? (
-      <AuthStackNavigator.Navigator>
-             <AuthStackNavigator.Screen name="StartupScreen" component={StartupScreen} />
-             <AuthStackNavigator.Screen name="AuthScreen" component={AuthScreen} />
-       </AuthStackNavigator.Navigator>
-    ) : (
-      <OrdersDrawerNavigator.Navigator screenOptions={{
+      <OrdersDrawerNavigator.Navigator initialRouteName='ProductsStackNavigation' screenOptions={{
           headerStyle:{
               backgroundColor: Platform.OS === 'android'? Colors.primaryColor: ''
           },
@@ -230,7 +233,6 @@ console.log(Authorized)
 
          
       </OrdersDrawerNavigator.Navigator>
-    )}
    </NavigationContainer>
     
   );

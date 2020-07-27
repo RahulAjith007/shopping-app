@@ -27,7 +27,7 @@ export const fetchProducts = () => {
                 )
             }
             dispatch({
-                type: 'SET_PRODUCTS',
+                type: SET_PRODUCTS,
                 products: loadedProducts,
                 userProducts: loadedProducts.filter(loadedProduct => loadedProduct.ownerId === userId)
             })
